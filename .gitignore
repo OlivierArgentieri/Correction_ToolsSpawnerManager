@@ -61,3 +61,8 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
+
+/CorrectionToolsSpawnerManager/Logs/**
+/CorrectionToolsSpawnerManager/.idea/**
+/CorrectionToolsSpawnerManager/Temp/**
+/CorrectionToolsSpawnerManager/Library/**
