@@ -18,6 +18,8 @@ public class SpawnerToolsEditor : EditorCustom<ST_SpawnerTools>
     {
         //base.OnInspectorGUI();
         EditoolsBox.HelpBoxInfo("SPAWN TOOL V1");
+        eTarget.TriggerZonePrefabs = (ST_SpawnTrigger) EditorGUILayout.ObjectField(eTarget.TriggerZonePrefabs, typeof(ST_SpawnTrigger), false);
+        if (!eTarget.TriggerZonePrefabs) return;
         
         EditoolsLayout.Space(1);
         DrawnSpawnPointsUI();
@@ -27,6 +29,8 @@ public class SpawnerToolsEditor : EditorCustom<ST_SpawnerTools>
 
     private void OnSceneGUI()
     {
+        if (!eTarget.TriggerZonePrefabs) return;
+
         DrawSpawnPointScene();
     }
 

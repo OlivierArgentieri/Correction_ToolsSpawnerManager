@@ -20,6 +20,15 @@ public class ST_CircleMode
     
     
     #region custom methods
+
+    public void Spawn()
+    {
+        for (int i = 0; i < AgentNumber; i++)
+        {
+            GameObject.CreatePrimitive(PrimitiveType.Cube).transform.position = GetRadiusPosition(i, AgentNumber, Radius, Position);
+        }
+    }
+    
     public Vector3 GetRadiusPosition(int _pos, int _maxPos, int _radius, Vector3 _center)
     {
         float _angle = (float)_pos / _maxPos * Mathf.PI * 2;
