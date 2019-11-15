@@ -98,20 +98,17 @@ public class SpawnerToolsEditor : EditorCustom<ST_SpawnerTools>
         {
             ST_SpawnPoint _point = eTarget.SpawnPoints[i];
 
-            Handles.color = Color.green;
-            Handles.DrawWireCube(_point.Position, _point.Size);
-            Handles.color = Color.white;
-
-            _point.Position = Handles.DoPositionHandle(_point.Position, Quaternion.identity);
-            _point.Size = Handles.DoScaleHandle(_point.Size, _point.Position, Quaternion.identity, 2);
-            EditoolsLayout.Space(1);
-
+            EditoolsHandle.SetColor(Color.green);
+            EditoolsHandle.DrawWireCube(_point.Position, _point.Size);
+            EditoolsHandle.SetColor(Color.white);
+            
+            EditoolsHandle.PositionHandle(ref _point.Position, Quaternion.identity);
+            EditoolsHandle.ScaleHandle(ref _point.Size, _point.Position, Quaternion.identity, 2);
+            EditoolsLayout.Space();
+            
             GetModeScene(_point);
-
         }
-        
     }
-
 
     void DrawSpawnModeUI(ST_SpawnPoint _point)
     {

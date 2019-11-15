@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 #if UNITY_EDITOR
+using EditoolsUnity;
 using UnityEditor;
 #endif
 
@@ -45,14 +46,15 @@ public class ST_CircleMode
 
     public void DrawSettings()
     {
-        Radius = EditorGUILayout.IntSlider("Radius", Radius, 1, 100);
-        AgentNumber = EditorGUILayout.IntSlider("Agent number", AgentNumber, 1, 50);
+        EditoolsField.IntSlider("Radius", ref Radius, 1, 100);
+        EditoolsField.IntSlider("Agent Number", ref AgentNumber, 1, 50);
     }
     public void DrawLinkTosSpawner(Vector3 _position) => Handles.DrawDottedLine(Position, _position, 0.5f);
     
     public void DrawSceneMode()
     {
-        Position = Handles.PositionHandle(Position, Quaternion.identity);
+        EditoolsHandle.PositionHandle(ref Position, Quaternion.identity);
+        
         Handles.DrawWireDisc(Position, Vector3.up, Radius);
         for (int i = 0; i < AgentNumber; i++)
         {
