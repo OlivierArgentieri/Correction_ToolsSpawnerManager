@@ -71,25 +71,51 @@ public class SpawnerToolsEditor : EditorCustom<ST_SpawnerTools>
             EditoolsLayout.Space(1);
             
             DrawSpawnModeUI(_point);
-            EditoolsLayout.Space(5);
+           
+            DrawnAgentUI(_point);
         }
     }
 
 
+    void DrawnAgentUI(ST_SpawnPoint _point)
+    {
+        _point.IsMonoAgent = EditorGUILayout.Toggle("Unique Agent? ", _point.IsMonoAgent);
+        EditoolsLayout.Space(5);
+
+        if (_point.IsMonoAgent)
+        {
+            EditoolsLayout.Horizontal(true);
+            _point.MonoAgent = (GameObject) EditorGUILayout.ObjectField(_point.MonoAgent, typeof(GameObject), false);
+            EditoolsButton.ButtonWithConfirm("X", Color.red, _point.RemoveAgent, "Remove Agent", "Remove Agent?");
+            EditoolsLayout.Horizontal(false);
+
+        }
+        else
+        {
+            EditoolsLayout.Horizontal(true);
+            EditoolsBox.HelpBox($"Add agent to spawn");
+            EditoolsLayout.Vertical(true);
+            EditoolsButton.Button("Add Agent", Color.cyan, _point.AddAgent);
+            EditoolsButton.ButtonWithConfirm("#", Color.red, _point.ClearAgents, "Clear Agents", "Clear All Agents ?",
+                _showCondition: _point.Agents.Count > 0);
+            EditoolsLayout.Vertical(false);
+            EditoolsLayout.Horizontal(false);
+
+            for (int j = 0; j < _point.Agents.Count; j++)
+            {
+                EditoolsLayout.Horizontal(true);
+                _point.Agents[j] =
+                    (GameObject) EditorGUILayout.ObjectField(_point.Agents[j], typeof(GameObject), false);
+                EditoolsButton.ButtonWithConfirm("X", Color.red, _point.RemoveAgent, j, "Remove Agent ?",
+                    "Remove This Agent ?");
+                EditoolsLayout.Horizontal(false);
+            }
+        }
+    }
+    
     void DrawModeSettingsUI(ST_SpawnMode _mode)
     {
-        switch (_mode.Type)
-        {
-            case ST_SpawnType.Circle:
-                _mode.circleMode.DrawSettings();
-                break;
-            case ST_SpawnType.Lie:
-                break;
-            case ST_SpawnType.Point:
-                break;
-            default:
-                throw new ArgumentOutOfRangeException();
-        }
+        _mode.Mode.DrawSettings();
     }
     
     void DrawSpawnPointScene()
@@ -107,8 +133,11 @@ public class SpawnerToolsEditor : EditorCustom<ST_SpawnerTools>
             EditoolsLayout.Space();
             
             GetModeScene(_point);
+
         }
+        
     }
+
 
     void DrawSpawnModeUI(ST_SpawnPoint _point)
     {
@@ -117,7 +146,7 @@ public class SpawnerToolsEditor : EditorCustom<ST_SpawnerTools>
         
         EditoolsLayout.Vertical(true);
         EditoolsButton.Button("+", Color.green, _point.AddMode);
-        EditoolsButton.ButtonWithConfirm("#",Color.red , _point.ClearAll, "Remove All ?", "Remove All Mode ?", _showCondition: _point.SpawnModes.Count > 0);
+        EditoolsButton.ButtonWithConfirm("#",Color.red , _point.ClearModes, "Remove All ?", "Remove All Mode ?", _showCondition: _point.SpawnModes.Count > 0);
         EditoolsLayout.Vertical(false); 
         
         EditoolsLayout.Horizontal(false);
@@ -144,16 +173,7 @@ public class SpawnerToolsEditor : EditorCustom<ST_SpawnerTools>
 
     void DrawModeScene(ST_SpawnMode _mode, ST_SpawnPoint _point)
     {
-        switch (_mode.Type)
-        {
-            case ST_SpawnType.Circle:
-                _mode.circleMode.DrawLinkTosSpawner(_point.Position);
-                _mode.circleMode.DrawSceneMode();
-                break;
-            case ST_SpawnType.Lie:
-                break;
-            case ST_SpawnType.Point:
-                break;
-        }
+        _mode.Mode.DrawLinkTosSpawner(_point.Position);
+        _mode.Mode.DrawSceneMode();
     }
 }

@@ -1,32 +1,43 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+ using Random = System.Random;
 #if UNITY_EDITOR
 using EditoolsUnity;
 using UnityEditor;
 #endif
 
 [Serializable]
-public class ST_CircleMode
+public class ST_CircleMode : ST_Mode
 {
     #region f/p
+    
     public int Radius = 5;
     public int AgentNumber = 10;
-    public Vector3 Position = Vector3.zero;
     #endregion
-
 
     
     
     #region custom methods
 
-    public void Spawn()
+    public override void Spawn(GameObject _agent)
+    {
+        if (!_agent) return;
+        for (int i = 0; i < AgentNumber; i++)
+        {
+            GameObject.Instantiate(_agent, GetRadiusPosition(i, AgentNumber, Radius, Position), Quaternion.identity);
+        }
+    }
+
+    public override void Spawn(List<GameObject> _agents)
     {
         for (int i = 0; i < AgentNumber; i++)
         {
-            GameObject.CreatePrimitive(PrimitiveType.Cube).transform.position = GetRadiusPosition(i, AgentNumber, Radius, Position);
+            int _randomIndex = UnityEngine.Random.Range(0, _agents.Count);
+            if (!_agents[_randomIndex]) continue;
+
+            GameObject.Instantiate(_agents[_randomIndex], GetRadiusPosition(i, AgentNumber, Radius, Position), Quaternion.identity);
         }
     }
     
@@ -44,14 +55,16 @@ public class ST_CircleMode
 
     #if UNITY_EDITOR
 
-    public void DrawSettings()
+    public override void DrawSettings()
     {
+        //Radius = EditorGUILayout.IntSlider("Radius", Radius, 1, 100);
+        //AgentNumber = EditorGUILayout.IntSlider("Radius", AgentNumber, 1, 100);
         EditoolsField.IntSlider("Radius", ref Radius, 1, 100);
         EditoolsField.IntSlider("Agent Number", ref AgentNumber, 1, 50);
     }
-    public void DrawLinkTosSpawner(Vector3 _position) => Handles.DrawDottedLine(Position, _position, 0.5f);
+    public override void DrawLinkTosSpawner(Vector3 _position) => Handles.DrawDottedLine(Position, _position, 0.5f);
     
-    public void DrawSceneMode()
+    public override void DrawSceneMode()
     {
         EditoolsHandle.PositionHandle(ref Position, Quaternion.identity);
         

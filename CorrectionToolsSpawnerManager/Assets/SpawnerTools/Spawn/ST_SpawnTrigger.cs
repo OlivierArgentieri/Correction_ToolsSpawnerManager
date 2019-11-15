@@ -43,19 +43,11 @@ public class ST_SpawnTrigger : MonoBehaviour
         for (int i = 0; i < data.SpawnModes.Count; i++)
         {
             ST_SpawnMode _mode = data.SpawnModes[i];
-
             
-            switch (_mode.Type)
-            {
-                case ST_SpawnType.Circle:            
-                    _mode.circleMode.Spawn();
-                    
-                    break;
-                case ST_SpawnType.Lie:
-                    break;
-                case ST_SpawnType.Point:
-                    break;
-            }
+            if(data.IsMonoAgent)
+                _mode.Mode.Spawn(data.MonoAgent);
+            else
+                _mode.Mode.Spawn(data.Agents);
         }
 
         Triggered = true;

@@ -10,15 +10,26 @@ public class ST_SpawnPoint
 
     public bool IsVisible = true;
     public List<ST_SpawnMode> SpawnModes = new List<ST_SpawnMode>();
+
+    public bool IsMonoAgent = false;
+    public GameObject MonoAgent = null;
+    public List<GameObject> Agents = new List<GameObject>();
+    
     public Vector3 Position = Vector3.zero;
     public Vector3 Size = Vector3.one;
+
+    public void AddAgent() => Agents.Add(null);
+    public void RemoveAgent(int _index) => Agents.RemoveAt(_index);
+    public void RemoveAgent() => MonoAgent = null;
+    public void ClearAgents() => Agents.Clear();
+    
     #endregion
 
     #region custom methods
 
     public void AddMode() => SpawnModes.Add(new ST_SpawnMode());
     public void RemoveMode(int _index) => SpawnModes.RemoveAt(_index);
-    public void ClearAll() => SpawnModes.Clear();
+    public void ClearModes() => SpawnModes.Clear();
 
     #endregion
 }
